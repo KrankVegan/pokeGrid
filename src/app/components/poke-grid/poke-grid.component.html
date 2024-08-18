@@ -1,7 +1,7 @@
 <div class="parent">
-    <div *ngFor="let pokemon of pokemonList()" class="pokemon-item">
+    <div *ngFor="let pokemon of pokemonList(); let i = index" class="pokemon-item" (click)="openPokemonDetails(i + 1)">
       <img [src]="pokemon.image" alt="{{ pokemon.name }}" />
       <p>{{ pokemon.name }}</p>
-      <p>Testtt</p>
     </div>
   </div>
+  

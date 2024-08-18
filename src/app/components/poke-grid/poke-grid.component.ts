@@ -1,19 +1,15 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { PokemonService } from '../../services/pokemon.service';
 import { HttpClientModule } from '@angular/common/http';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { PokemonDetailsDialogComponent } from '../pokemon-details-dialog/pokemon-details-dialog.component';
 
 @Component({
   selector: 'app-poke-grid',
   standalone: true,
   imports: [
     HttpClientModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
     CommonModule,
   ],
   providers: [PokemonService],
@@ -22,32 +18,47 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class PokeGridComponent implements OnInit {
-  pokemonList = signal<{ name: string; image: string }[]>([]);  // Signal to store the list of Pokémon
-  loading = signal(false);  // Signal to track loading state
+  pokemonList = signal<{ name: string; image: string }[]>([]);
+  loading = signal(false);
 
-  constructor(private pokemonService: PokemonService) {}
+  constructor(private pokemonService: PokemonService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadPokemons();
   }
 
-  // Function to fetch the first 20 Pokémon using the service
+  // Fetches the first 20 Pokémon
   loadPokemons(): void {
-    this.loading.set(true);  // Set loading to true while data is being fetched
+    this.loading.set(true);
     this.pokemonService.getFirstTwentyPokemons().subscribe({
       next: (response: any) => {
-        // Map the API response to extract names and images for each Pokémon
         const pokemonArray = response.results.map((pokemon: any, index: number) => ({
           name: pokemon.name,
-          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png`,  // Create image URL based on index
+          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png`,
         }));
-        this.pokemonList.set(pokemonArray);  // Set the signal value for the Pokémon list
-        this.loading.set(false);  // Stop loading
+        this.pokemonList.set(pokemonArray);
+        this.loading.set(false);
       },
       error: () => {
         console.error('Error fetching Pokémon data');
-        this.loading.set(false);  // Stop loading in case of error
+        this.loading.set(false);
       },
+    });
+  }
+
+  // Opens the Pokémon details dialog when a Pokémon is clicked
+  openPokemonDetails(id: number): void {
+    this.pokemonService.getPokemonById(id).subscribe((pokemon: any) => {
+      const abilities = pokemon.abilities.map((ability: any) => ability.ability.name);
+      const dialogRef = this.dialog.open(PokemonDetailsDialogComponent, {
+        data: {
+          pokemon: {
+            name: pokemon.name,
+            image: pokemon.sprites.front_default,
+            abilities,
+          },
+        },
+      });
     });
   }
 }

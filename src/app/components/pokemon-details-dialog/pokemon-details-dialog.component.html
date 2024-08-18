@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ pokemon.name }}</h2>
+
+<div mat-dialog-content>
+  <img [src]="pokemon.image" alt="{{ pokemon.name }}" />
+  <h3>Abilities</h3>
+  <ul>
+    <li *ngFor="let ability of pokemon.abilities">{{ ability }}</li>
+  </ul>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</div>
