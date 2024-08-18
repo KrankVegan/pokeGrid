@@ -1,0 +1,6 @@
+<div class="parent">
+    <div *ngFor="let pokemon of pokemonList()" class="pokemon-item">
+      <img [src]="pokemon.image" alt="{{ pokemon.name }}" />
+      <p>{{ pokemon.name }}</p>
+    </div>
+  </div>
