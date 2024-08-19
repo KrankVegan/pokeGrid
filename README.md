@@ -25,3 +25,9 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## More information
+
+You need to run `npm install` and `ng add @angular/material` before getting started with this project. Once that's downloaded, do `ng serve -o` and visit the localhost URL that's shown.
+
+Thanks for visiting my project!
