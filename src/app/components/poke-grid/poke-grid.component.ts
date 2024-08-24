@@ -50,12 +50,16 @@ export default class PokeGridComponent implements OnInit {
   openPokemonDetails(id: number): void {
     this.pokemonService.getPokemonById(id).subscribe((pokemon: any) => {
       const abilities = pokemon.abilities.map((ability: any) => ability.ability.name);
+      const cryUrl = pokemon.cries.latest
+
+
       this.dialog.open(PokemonDetailsDialogComponent, {
         data: {
           pokemon: {
             name: pokemon.name,
             image: pokemon.sprites.front_default,
-            abilities
+            abilities,
+            cryUrl
           },
         },
       });
