@@ -15,4 +15,11 @@ export class PokemonDetailsDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.pokemon = data.pokemon;
   }
+  ngOnInit(): void {
+    // Play the cry sound if the cryUrl is available
+    if (this.data.pokemon.cryUrl) {
+      const cryAudio = new Audio(this.data.pokemon.cryUrl);
+      cryAudio.play().catch(error => console.error('Error playing cry audio:', error));
+    }
+  }
 }
